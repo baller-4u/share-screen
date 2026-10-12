@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScreenVibe - Share your screen with your people</title>
+<meta name="description" content="Private screen-sharing rooms with passwords and QR join.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="wrap">
+  <div class="logo"><i></i>ScreenVibe</div>
+
+  <!-- HOME -->
+  <section id="home" class="screen">
+    <h1>Show your screen.<br><span>Keep it private.</span></h1>
+    <p class="sub">Make a room, set a password, and share it. Friends join with the code or by scanning your QR.</p>
+    <div class="card">
+      <div class="tabs">
+        <button class="tab on" id="tabCreate">Create room</button>
+        <button class="tab" id="tabJoin">Join room</button>
+      </div>
+      <div id="paneCreate">
+        <label for="pw">Room password</label>
+        <input id="pw" type="text" autocomplete="off" placeholder="Pick a password" maxlength="40">
+        <div class="chk"><input id="inclPw" type="checkbox" checked><span>Put the password inside the QR code and link</span></div>
+        <button class="btn" id="btnCreate">Create room</button>
+      </div>
+      <div id="paneJoin" class="hidden">
+        <label for="joinCode">Room code</label>
+        <input id="joinCode" type="text" autocomplete="off" placeholder="ABC123" maxlength="6">
+        <label for="joinPw">Password</label>
+        <input id="joinPw" type="password" autocomplete="off" placeholder="Room password">
+        <button class="btn" id="btnJoin">Join room</button>
+      </div>
+    </div>
+    <p class="hint center">The video goes straight between devices. No account needed.</p>
+  </section>
+
+  <!-- HOST -->
+  <section id="host" class="screen hidden">
+    <div class="spread" style="margin-top:22px">
+      <span class="pill"><span class="dot" id="hostDot"></span><span id="hostStatus">Room is open</span></span>
+      <span class="pill" id="viewerCount">0 watching</span>
+    </div>
+    <div class="card center">
+      <div class="sub" style="margin-bottom:10px">Room code</div>
+      <div class="code" id="hostCode"></div>
+      <div class="qrbox"><div id="qr"></div></div>
+      <div class="hint">Friends scan this, or enter the code and password.</div>
+      <div class="row">
+        <button class="btn ghost" id="copyLink">Copy link</button>
+        <button class="btn ghost" id="copyCode">Copy code</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="stage"><video id="preview" autoplay muted playsinline></video></div>
+      <button class="btn" id="btnShare">Share my screen</button>
+      <button class="btn stop hidden" id="btnStop">Stop sharing</button>
+      <p class="hint hidden" id="noShare">Phones can't share their screen from a browser. Open ScreenVibe on a laptop or desktop to share. Phones can still watch.</p>
+    </div>
+    <div class="center"><button class="leave" id="closeRoom">Close room</button></div>
+  </section>
+
+  <!-- VIEWER -->
+  <section id="viewer" class="screen hidden">
+    <div class="spread" style="margin-top:22px">
+      <span class="pill"><span class="dot" id="vDot"></span><span id="vStatus">Connecting...</span></span>
+      <span class="pill" id="vCode"></span>
+    </div>
+    <div class="card">
+      <div class="stage">
+        <video id="remote" autoplay muted playsinline controls></video>
+        <div class="wait" id="wait">Waiting for the host to start sharing...</div>
+      </div>
+      <div class="row">
+        <button class="btn ghost" id="btnMute">Unmute sound</button>
+        <button class="btn ghost" id="btnFull">Full screen</button>
+      </div>
+    </div>
+    <div class="center"><button class="leave" id="leaveRoom">Leave room</button></div>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
